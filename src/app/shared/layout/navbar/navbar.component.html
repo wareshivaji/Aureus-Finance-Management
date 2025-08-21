@@ -1,0 +1,49 @@
+<mat-toolbar color="primary" class="navbar">
+  <div class="navbar-brand">
+    <mat-icon class="brand-icon">account_balance</mat-icon>
+    <span class="brand-text">Aureus</span>
+  </div>
+
+  <div class="nav-spacer"></div>
+
+  <!-- Navigation Links -->
+  <nav class="nav-links">
+    <a 
+      *ngFor="let item of navItems" 
+      [routerLink]="item.path" 
+      routerLinkActive="active"
+      class="nav-link"
+    >
+      <mat-icon>{{ item.icon }}</mat-icon>
+      <span class="link-text">{{ item.label }}</span>
+    </a>
+  </nav>
+
+  <div class="nav-spacer"></div>
+
+  <!-- Theme Toggle -->
+  <button mat-icon-button (click)="toggleTheme()" class="theme-toggle" matTooltip="Toggle theme">
+    <mat-icon>{{ isDarkMode ? 'light_mode' : 'dark_mode' }}</mat-icon>
+  </button>
+
+  <!-- User Menu (placeholder) -->
+  <button mat-icon-button [matMenuTriggerFor]="userMenu" class="user-menu">
+    <mat-icon>account_circle</mat-icon>
+  </button>
+  
+  <mat-menu #userMenu="matMenu">
+    <button mat-menu-item>
+      <mat-icon>person</mat-icon>
+      <span>Profile</span>
+    </button>
+    <button mat-menu-item>
+      <mat-icon>settings</mat-icon>
+      <span>Settings</span>
+    </button>
+    <mat-divider></mat-divider>
+    <button mat-menu-item>
+      <mat-icon>logout</mat-icon>
+      <span>Logout</span>
+    </button>
+  </mat-menu>
+</mat-toolbar>

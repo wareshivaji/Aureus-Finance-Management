@@ -1,0 +1,38 @@
+<mat-vertical-stepper [linear]="true">
+  <!-- Step 1 -->
+  <mat-step [stepControl]="budgetForm">
+    <form [formGroup]="budgetForm">
+      <ng-template matStepLabel>Set Budget</ng-template>
+
+      <mat-form-field appearance="fill">
+        <mat-label>Category</mat-label>
+        <mat-select formControlName="category">
+          <mat-option value="Groceries">Groceries</mat-option>
+          <mat-option value="Entertainment">Entertainment</mat-option>
+          <mat-option value="Rent">Rent</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill">
+        <mat-label>Amount</mat-label>
+        <input matInput type="number" formControlName="amount">
+      </mat-form-field>
+
+      <mat-form-field appearance="fill">
+        <mat-label>Period</mat-label>
+        <mat-select formControlName="period">
+          <mat-option value="weekly">Weekly</mat-option>
+          <mat-option value="monthly">Monthly</mat-option>
+          <mat-option value="yearly">Yearly</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-slide-toggle formControlName="rollover">Allow Rollover</mat-slide-toggle>
+
+      <div class="actions">
+        <button mat-stroked-button color="warn" (click)="onCancel()">Cancel</button>
+        <button mat-raised-button color="primary" (click)="onSave()">Save Budget</button>
+      </div>
+    </form>
+  </mat-step>
+</mat-vertical-stepper>

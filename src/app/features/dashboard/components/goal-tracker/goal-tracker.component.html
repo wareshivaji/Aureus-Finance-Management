@@ -1,0 +1,92 @@
+<h2 mat-dialog-title>{{ data ? 'Edit Goal' : 'Create New Goal' }}</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="goalForm" class="goal-form">
+    <!-- Goal Name -->
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Goal Name</mat-label>
+      <input matInput formControlName="name" placeholder="e.g., Emergency Fund">
+      <mat-error *ngIf="hasError('name', 'required')">Goal name is required</mat-error>
+    </mat-form-field>
+
+    <!-- Target Amount -->
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Target Amount</mat-label>
+      <span matPrefix>$&nbsp;</span>
+      <input matInput type="number" formControlName="targetAmount" min="1">
+      <mat-error *ngIf="hasError('targetAmount', 'required')">Target amount is required</mat-error>
+      <mat-error *ngIf="hasError('targetAmount', 'min')">Target must be at least $1</mat-error>
+    </mat-form-field>
+
+    <!-- Current Amount -->
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Current Amount</mat-label>
+      <span matPrefix>$&nbsp;</span>
+      <input matInput type="number" formControlName="currentAmount" min="0">
+      <mat-error *ngIf="hasError('currentAmount', 'required')">Current amount is required</mat-error>
+      <mat-error *ngIf="hasError('currentAmount', 'min')">Amount cannot be negative</mat-error>
+    </mat-form-field>
+
+    <!-- Target Date -->
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Target Date</mat-label>
+      <input matInput [matDatepicker]="picker" formControlName="targetDate">
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+      <mat-error *ngIf="hasError('targetDate', 'required')">Target date is required</mat-error>
+    </mat-form-field>
+
+    <!-- Category -->
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Category</mat-label>
+      <mat-select formControlName="category">
+        <mat-option *ngFor="let category of categories" [value]="category.value">
+          <mat-icon>{{ category.icon }}</mat-icon>
+          {{ category.label }}
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="hasError('category', 'required')">Category is required</mat-error>
+    </mat-form-field>
+
+    <!-- Priority -->
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Priority</mat-label>
+      <mat-select formControlName="priority">
+        <mat-option *ngFor="let priority of priorities" [value]="priority">
+          {{ priority | titlecase }}
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="hasError('priority', 'required')">Priority is required</mat-error>
+    </mat-form-field>
+
+    <!-- Auto Deduct Toggle -->
+    <mat-slide-toggle formControlName="autoDeduct" class="full-width">
+      Automatically deduct from income
+    </mat-slide-toggle>
+
+    <!-- Auto Deduct Amount (only shown when autoDeduct is true) -->
+    <div *ngIf="goalForm.get('autoDeduct')?.value" class="full-width">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Monthly Deduction Amount</mat-label>
+        <span matPrefix>$&nbsp;</span>
+        <input matInput type="number" formControlName="autoDeductAmount" min="1">
+        <mat-error *ngIf="hasError('autoDeductAmount', 'required')">Deduction amount is required</mat-error>
+        <mat-error *ngIf="hasError('autoDeductAmount', 'min')">Must be at least $1</mat-error>
+      </mat-form-field>
+    </div>
+
+    <!-- Notes -->
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Notes (optional)</mat-label>
+      <textarea matInput formControlName="notes" rows="3" placeholder="Any additional notes about this goal..."></textarea>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-stroked-button color="warn" (click)="onCancel()">Cancel</button>
+  <button mat-raised-button color="primary" (click)="onSave()" [disabled]="!goalForm.valid">
+    <mat-icon>{{ data ? 'save' : 'add' }}</mat-icon>
+    {{ data ? 'Update Goal' : 'Create Goal' }}
+  </button>
+</mat-dialog-actions>

@@ -1,0 +1,54 @@
+<div class="p-6 grid grid-cols-2 gap-6">
+  <div class="charts-row">
+    <!-- Spending by Category -->
+    <div class="chart-card">
+      <h3 class="chart-title">Spending by Category</h3>
+      <canvas id="spendingChart"></canvas>
+    </div>
+
+    <!-- Income vs Expenses -->
+    <div class="chart-card">
+      <h3 class="chart-title">Income vs Expenses</h3>
+      <canvas id="incomeExpenseChart"></canvas>
+    </div>
+  </div>
+
+  <!-- Line Graph -->
+  <div class="chart-card full-width">
+    <h3 class="chart-title">Monthly Trends</h3>
+    <canvas id="trendsChart"></canvas>
+  </div>
+
+  <!-- Insights & Alerts -->
+  <div class="col-span-2 bg-white p-4 rounded-2xl shadow">
+    <h2 class="text-xl font-bold mb-2">Financial Insights</h2>
+    
+    <div class="insights-grid grid grid-cols-2 gap-4">
+      <div class="insight-item">
+        <h4>Savings Rate</h4>
+        <p class="insight-value">{{ savingsRate() | number:'1.0-0' }}%</p>
+        <p class="insight-desc">of income saved</p>
+      </div>
+      
+      <div class="insight-item">
+        <h4>Monthly Cash Flow</h4>
+        <p class="insight-value" [class.positive]="cashFlow() >= 0" [class.negative]="cashFlow() < 0">
+          {{ cashFlow() | currency }}
+        </p>
+        <p class="insight-desc">net monthly change</p>
+      </div>
+    </div>
+
+    <!-- Export Buttons -->
+    <div class="mt-4">
+      <button class="px-4 py-2 bg-blue-500 text-white rounded-lg mr-2"
+              (click)="exportData('pdf')">
+        Export PDF
+      </button>
+      <button class="px-4 py-2 bg-green-500 text-white rounded-lg"
+              (click)="exportData('csv')">
+        Export CSV
+      </button>
+    </div>
+  </div>
+</div>

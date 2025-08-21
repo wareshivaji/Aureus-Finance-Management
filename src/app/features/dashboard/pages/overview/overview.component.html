@@ -1,0 +1,99 @@
+<div class="overview-container">
+  <!-- Top Row: Summary Cards -->
+  <div class="summary-row">
+    <mat-card class="summary-card balance">
+      <h2>Current Balance</h2>
+      <p class="amount" [class.positive]="adjustedBalance() >= 0" [class.negative]="adjustedBalance() < 0">
+        {{ adjustedBalance() | currency }}
+      </p>
+    </mat-card>
+
+    <mat-card class="summary-card income">
+      <h2>Total Income</h2>
+      <p class="amount">{{ summary().totalIncome | currency }}</p>
+      <p class="subtext">This month</p>
+    </mat-card>
+
+    <mat-card class="summary-card expenses">
+      <h2>Total Expenses</h2>
+      <p class="amount">{{ summary().totalExpenses | currency }}</p>
+      <p class="subtext">This month</p>
+    </mat-card>
+  </div>
+
+  <!-- Quick Actions -->
+  <div class="quick-actions">
+    <button mat-raised-button color="primary" (click)="openTransactionDialog()">
+      <mat-icon>add</mat-icon> Add Transaction
+    </button>
+    <button mat-raised-button color="accent" (click)="openBudgetEditor()">
+      <mat-icon>account_balance_wallet</mat-icon> Set Budget
+    </button>
+    <button mat-raised-button color="warn" (click)="openGoalTracker()">
+      <mat-icon>savings</mat-icon> Create Goal
+    </button>
+  </div>
+
+  <div class="content-sections">
+    <!-- Recent Transactions -->
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>Recent Transactions</mat-card-title>
+      </mat-card-header>
+      <mat-list>
+        <mat-list-item *ngFor="let t of recentTransactions()">
+          <div style="display: flex; justify-content: space-between; width: 100%; align-items: center;">
+            <div>
+              <mat-icon matListIcon>{{ getCategoryIcon(t.category) }}</mat-icon>
+              <span>{{ t.category }}</span>
+              <small *ngIf="t.description">{{ t.description }}</small>
+            </div>
+            <span [ngStyle]="{ color: t.type === 'income' ? 'green' : 'red' }">
+              {{ t.type === 'income' ? '+' : '-' }}{{ t.amount | currency }}
+            </span>
+          </div>
+        </mat-list-item>
+      </mat-list>
+    </mat-card>
+
+    <!-- Budget Progress -->
+    <mat-card class="budgets">
+      <mat-card-header>
+        <mat-card-title>Budget Progress</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div *ngFor="let bp of budgetProgress()" class="budget-item">
+          <div class="budget-header">
+            <span>{{ bp.budget.category }}: {{ bp.spent | currency }}/{{ bp.budget.amount | currency }}</span>
+            <span>{{ bp.percentage | number:'1.0-0' }}%</span>
+          </div>
+          <mat-progress-bar 
+            [value]="bp.percentage" 
+            [color]="bp.status === 'exceeded' ? 'warn' : (bp.status === 'warning' ? 'accent' : 'primary')">
+          </mat-progress-bar>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Goals Progress -->
+    <mat-card class="goals">
+      <mat-card-header>
+        <mat-card-title>Goals Progress</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="goal-grid">
+          <div *ngFor="let gp of goalProgress()" class="goal-item">
+            <mat-progress-spinner
+              mode="determinate"
+              [value]="gp.progressPercentage"
+              [color]="gp.status === 'behind' ? 'warn' : (gp.status === 'ahead' ? 'accent' : 'primary')"
+              diameter="80">
+            </mat-progress-spinner>
+            <p>{{ gp.goal.name }}</p>
+            <small>{{ gp.progressPercentage | number:'1.0-0' }}% Complete</small>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
